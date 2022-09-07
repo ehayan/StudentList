@@ -29,6 +29,11 @@
 
 <script>
 import {mdbTbl, mdbTblHead, mdbTblBody} from 'mdbvue';
+import firebase from "firebase";
+
+const db = firebase.firestore();
+db.collection('test').doc('상품2').set({제목:'변기'})
+
 
 export default {
   name: "StudentList.vue",

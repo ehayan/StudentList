@@ -46,9 +46,9 @@ export default {
           })
     },
     onSelected(value) {
-      const self = this;  // 페이지이동
-      console.log(value.key)
-      self.$router.push({name: 'studentRevision', params: {id: value.key}})
+      // const self = this;  // 페이지이동
+      // console.log(value.key)
+      this.$router.push({name: 'studentRevision', params: {id: value.key}})
     },
   }
 }

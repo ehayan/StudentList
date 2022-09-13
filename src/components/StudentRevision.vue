@@ -1,38 +1,41 @@
 <template>
-<div>
-  <h4>정보 수정 / 삭제</h4>
+  <div>
+    <h4>정보 수정 / 삭제</h4>
 
-  <div class="Inputs">
-    <h5>이름</h5><input v-model="name" type="text">
-    <h5>나이</h5><input v-model="age" type="text">
-    <h5>성별</h5>
+    <div class="Inputs">
+      <h5 class="mt-3">이름</h5><input v-model="name" type="text">
+      <h5 class="mt-3">나이</h5><input v-model="age" type="text">
+      <div class="mt-3">
+        <h5>성별</h5>
+        <div class="custom-control custom-radio mt-3">
+          <input v-model="gender" type="radio" class="custom-control-input" name="gender" value="남" id="man">
+          <label class="custom-control-label" for="man">남</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input v-model="gender" type="radio" class="custom-control-input" name='gender' value="여" id="woman">
+          <label class="custom-control-label" for="woman">여</label>
+        </div>
+      </div>
 
-    <div class="custom-control custom-radio mt-3">
-      <input v-model="gender" type="radio" class="custom-control-input" name="gender" value="남" id="man">
-      <label class="custom-control-label" for="man">남</label>
+      <div class="mt-3">
+        <h5 >학급</h5>
+        <div class="custom-control custom-radio mt-3">
+          <input v-model="grade" type="radio" class="custom-control-input" name="grade" value="A" id="A">
+          <label class="custom-control-label" for="A">A</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input v-model="grade" type="radio" class="custom-control-input" name='grade' value="B" id="B">
+          <label class="custom-control-label" for="B">B</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input v-model="grade" type="radio" class="custom-control-input" name='grade' value="C" id="C">
+          <label class="custom-control-label" for="C">C</label>
+        </div>
+      </div>
     </div>
-    <div class="custom-control custom-radio">
-      <input v-model="gender" type="radio" class="custom-control-input" name='gender' value="여" id="woman">
-      <label class="custom-control-label" for="woman">여</label>
-    </div>
-
-
-    <div class="custom-control custom-radio mt-3">
-      <input v-model="grade" type="radio" class="custom-control-input" name="grade" value="A" id="A">
-      <label class="custom-control-label" for="A">A</label>
-    </div>
-    <div class="custom-control custom-radio">
-      <input v-model="grade" type="radio" class="custom-control-input" name='grade' value="B" id="B">
-      <label class="custom-control-label" for="B">B</label>
-    </div>
-    <div class="custom-control custom-radio">
-      <input v-model="grade" type="radio" class="custom-control-input" name='grade' value="C" id="C">
-      <label class="custom-control-label" for="C">C</label>
-    </div>
+    <button class="m-3"  @click="onUpdateData">수정</button>
+    <button class="m-3" @click="onDeleteData">삭제</button>
   </div>
-  <button @click="onUpdateData">수정</button>
-  <button @click="onDeleteData">삭제</button>
-</div>
 </template>
 
 <script>
@@ -42,13 +45,14 @@ export default {
   name: "StudentDataRevice",
   data() {
     return {
+      key:'',
       name: '',
       age: '',
       gender: '',
       grade: ''
-  }
+    }
   },
-  methods:{
+  methods: {
     onUpdateData() {
       const db = firebase.firestore();
       const self = this;
@@ -65,7 +69,7 @@ export default {
           .catch((error) =>
               console.log('error발생', error))
     },
-    onDeleteData(){
+    onDeleteData() {
       const db = firebase.firestore();
       db.collection('school')
           .doc(this.key)

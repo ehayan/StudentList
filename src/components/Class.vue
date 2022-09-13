@@ -35,7 +35,7 @@ export default {
       const self = this;
       const db = firebase.firestore()
       db.collection('school')
-          .where('grade', '==', 'A')
+          .where('grade', '==', this.$route.params.id)
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {

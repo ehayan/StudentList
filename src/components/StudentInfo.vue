@@ -30,8 +30,6 @@
       </div>
     </div>
     <button @click="onAddData">저장</button>
-
-
   </div>
 </template>
 
@@ -61,8 +59,9 @@ export default {
           })
           .then(() => {
             alert('등록성공')
+            this.$router.go(-1);
           })
-    },
+    }
   }
 }
 </script>

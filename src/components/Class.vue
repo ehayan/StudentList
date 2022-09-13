@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h4>학생 리스트</h4>
+    <h4>Class {{$route.params.id}}</h4>
     <router-link to="/studentInfo">등록</router-link>
     <div>
-      <mdb-datatable-2 id="studentlist" class="card mt-3 p-3 mb-3" v-model="studentData" hover noFoundMessage="데이터가 없습니다" @selected='onSelected($event)'/>
+      <mdb-datatable-2 className="card mt-3 p-3 mb-3" v-model="studentData" hover noFoundMessage="데이터가 없습니다"/>
     </div>
   </div>
 
@@ -23,7 +23,7 @@ export default {
     return {
       studentData: {
         rows: [],
-        columns: user_columns
+        columns: user_columns,
       }
     }
   },
@@ -35,6 +35,7 @@ export default {
       const self = this;
       const db = firebase.firestore()
       db.collection('school')
+          .where('grade', '==', 'A')
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -44,11 +45,6 @@ export default {
             });
 
           })
-    },
-    onSelected(value) {
-      const self = this;  // 페이지이동
-      console.log(value.key)
-      self.$router.push({name: 'studentRevision', params: {id: value.key}})
     },
   }
 }

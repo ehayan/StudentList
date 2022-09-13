@@ -13,6 +13,7 @@ Vue.config.productionTip = false
 import Notify from 'mdbvue/lib/components/Notify'
 Vue.use(Notify)
 
+export const eventBus = new Vue()
 
 new Vue({
   router,

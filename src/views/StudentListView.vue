@@ -1,12 +1,17 @@
 <template>
   <div>
-    <h1>hello</h1>
+    <StudentList/>
   </div>
 </template>
 
 <script>
+import StudentList from '../components/StudentList.vue'
 export default {
-  name: "StudentListView.vue"
+  name: "StudentListView.vue",
+  components: {StudentList}
+},
+components:{
+  StudentList
 }
 </script>
 

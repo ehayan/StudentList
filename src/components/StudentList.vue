@@ -3,44 +3,58 @@
     <h4>학생 리스트</h4>
     <router-link to="/studentInfo">등록</router-link>
     <div>
-      <mdb-tbl hover>
-        <mdb-tbl-head>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Gender</th>
-          </tr>
-        </mdb-tbl-head>
-        <mdb-tbl-body >
-          <tr>
-            <th>1</th>
-            <td>홍길동</td>
-            <td>20</td>
-            <td>남</td>
-          </tr>
-        </mdb-tbl-body>
-      </mdb-tbl>
+      <mdb-datatable-2 class="card mt-3 p-3 mb-3" v-model="studentData" hover noFoundMessage="데이터가 없습니다"/>
     </div>
-
   </div>
 
 </template>
 
 <script>
-import {mdbTbl, mdbTblHead, mdbTblBody} from 'mdbvue';
 import firebase from "firebase";
-
-const db = firebase.firestore();
-db.collection('test').doc('상품2').set({제목:'변기'})
-
+import {mdbDatatable2} from 'mdbvue';
+import user_columns from "@/data/user_columns";
 
 export default {
   name: "StudentList.vue",
   components: {
-    mdbTbl,
-    mdbTblHead,
-    mdbTblBody
+    mdbDatatable2
+  },
+  data() {
+    return {
+      studentData: {
+        rows: [],
+        columns: user_columns
+      }
+    }
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      const self = this;
+      const db = firebase.firestore()
+      db.collection('school')
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              const _data = doc.data();
+              self.studentData.rows.push(_data);
+            });
+
+          })
+    },
+    // onUpdateData() {
+    //   const db = firebase.firestore();
+    //   // const self = this;
+    //   db.collection('school')
+    //       .get()
+    //       .then((result) => {
+    //         result.forEach((doc) => {
+    //           console.log(doc.data());
+    //         })
+    //       });
+    // }
   }
 }
 </script>

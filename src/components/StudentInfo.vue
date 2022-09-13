@@ -28,17 +28,16 @@
         <input v-model="grade" type="radio" class="custom-control-input" name='grade' value="C" id="C">
         <label class="custom-control-label" for="C">C</label>
       </div>
+    </div>
+    <button @click="onAddData">저장</button>
 
 
-    </div>
-    <div>
-      {{ name }} : {{ age }} : {{ gender }} : {{grade}}
-    </div>
-    <button>저장</button>
   </div>
 </template>
 
 <script>
+import firebase from "firebase";
+
 export default {
   name: "StudentInfo.vue",
   data() {
@@ -46,11 +45,24 @@ export default {
       name: '',
       age: '',
       gender: '남',
-      grade: 'A'
+      grade: 'A',
     }
   },
   methods: {
-
+    onAddData() {
+      const db = firebase.firestore();
+      const self = this;
+      db.collection('school')
+          .add({
+            name: self.name,
+            age: self.age,
+            gender: self.gender,
+            grade: self.grade,
+          })
+          .then(() => {
+            alert('등록성공')
+          })
+    },
   }
 }
 </script>

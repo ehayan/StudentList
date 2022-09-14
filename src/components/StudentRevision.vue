@@ -18,7 +18,7 @@
       </div>
 
       <div class="mt-3">
-        <h5 >학급</h5>
+        <h5>학급</h5>
         <div class="custom-control custom-radio mt-3">
           <input v-model="grade" type="radio" class="custom-control-input" name="grade" value="A" id="A">
           <label class="custom-control-label" for="A">A</label>
@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <button class="m-3"  @click="onUpdateData">수정</button>
+    <button class="m-3" @click="onUpdateData">수정</button>
     <button class="m-3" @click="onDeleteData">삭제</button>
   </div>
 </template>
@@ -42,21 +42,37 @@
 import firebase from "firebase";
 
 export default {
-  name: "StudentDataRevice",
+  name: "StudentRevision",
   data() {
     return {
-      key:'',
+      key: this.$route.params.id,
       name: '',
       age: '',
       gender: '',
       grade: ''
     }
   },
+  mounted() {
+    this.init()
+  },
   methods: {
+    init() {
+      const db = firebase.firestore();
+      const _ref = db.collection('school').doc(`${this.key}`);
+     _ref.get()
+         .then((doc) => {
+           this.name = doc.data().name;
+           this.age = doc.data().age;
+           this.gender = doc.data().gender;
+           this.grade = doc.data().grade
+           // console.log(doc.data())
+         })
+
+    },
     onUpdateData() {
       const db = firebase.firestore();
       const self = this;
-      const _ref = db.collection('school').doc(this.key);
+      const _ref = db.collection('school').doc(`${this.key}`);
       _ref.update({
         name: self.name,
         age: self.age,
@@ -65,6 +81,7 @@ export default {
       })
           .then(() => {
             alert('수정 완료')
+            this.$router.go(-1);
           })
           .catch((error) =>
               console.log('error발생', error))
@@ -75,7 +92,7 @@ export default {
           .doc(this.key)
           .delete()
           .then(() => {
-            // alert('삭제 완료')
+            alert('삭제 완료')
           })
           .catch((error) => {
             console.log('ERROR!', error);

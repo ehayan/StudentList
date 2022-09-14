@@ -42,7 +42,6 @@ export default {
               _data['key'] = doc.id;
               self.studentData.rows.push(_data);
             });
-
           })
     },
     onSelected(value) {

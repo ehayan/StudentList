@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+// import Home from './views/Home.vue'
 import studentInfo from "@/components/StudentInfo";
 import StudentList from "@/components/StudentList";
 import Class from '@/components/Class'
 import ClassList from "@/components/ClassList";
 import studentRevision from "@/components/StudentRevision";
+
+import Login from '@/components/Login.vue'
+import Register from "@/components/Register";
 
 
 Vue.use(Router)
@@ -14,9 +17,19 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'login',
+      component: Login
     },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
+    },
+    // {
+    //   path: '/',
+    //   name: 'home',
+    //   component: Home
+    // },
     {
       path: '/studentList',
       name: 'studentList',

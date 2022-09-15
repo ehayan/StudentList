@@ -7,7 +7,7 @@
       <input type="email" placeholder="email" v-model="id">
       <br/>
       <label>PW</label>
-      <input type="text" placeholder="password" v-model="pw">
+      <input type="password" placeholder="password" v-model="pw">
       <br/>
       <label>Name</label>
       <input type="text" placeholder="name" v-model="name">
@@ -48,18 +48,31 @@ export default {
   },
   methods: {
     onSave() {
-      // const db = firebase.firestore();
+      const db = firebase.firestore();
+      const self = this;
       firebase.auth().createUserWithEmailAndPassword(this.id, this.pw)
           .then((result) => {
-            console.log(result)
             console.log(result.user)
+
             alert('회원가입 성공!')
+            this.$router.go(-1)
           })
           .catch((error) => {
-            if (this.pw.length <= 6) {
+            const errorCode = error.code;
+            if (errorCode === 'auth/weak-password') {
               alert('비밀번호는 최소 6자리 입니다')
             }
-            console.log(error)
+            if (errorCode === 'auth/invalid-email') {
+              alert('유효하지않은 이메일입니다')
+            }
+          })
+
+      db.collection('teacher')
+          .add({
+            id: self.id,
+            name: self.name,
+            gender: self.gender,
+            birth: self.birth
           })
     }
   }

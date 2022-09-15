@@ -3,7 +3,8 @@
     <h4>학생 리스트</h4>
     <router-link to="/studentInfo">등록</router-link>
     <div>
-      <mdb-datatable-2 id="studentlist" class="card mt-3 p-3 mb-3" v-model="studentData" hover noFoundMessage="데이터가 없습니다" @selected='onSelected($event)'/>
+      <mdb-datatable-2 id="studentlist" class="card mt-3 p-3 mb-3" v-model="studentData" hover
+                       noFoundMessage="데이터가 없습니다" @selected='onSelected($event)'/>
     </div>
   </div>
 
@@ -46,7 +47,7 @@ export default {
     },
     onSelected(value) {
       // const self = this;  // 페이지이동
-      // console.log(value.key)
+      console.log(value)
       this.$router.push({name: 'studentRevision', params: {id: value.key}})
     },
   }

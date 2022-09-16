@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h4>반이 정해지지 않은 학생 리스트</h4>
-    <router-link to="/register/student">신규 학생 등록</router-link>
+    <h4>{{this.$route.params.grade}}학년 미지정 학생 리스트</h4>
     <div class="mt-4">
       <mdb-datatable-2 id="studentlist" class="card mt-3 p-3 mb-3" v-model="studentData" hover
                        noFoundMessage="데이터가 없습니다" @selected='onSelected($event)'/>
@@ -16,7 +15,7 @@ import {mdbDatatable2} from 'mdbvue';
 import user_columns from "@/data/user_columns";
 
 export default {
-  name: "StudentList.vue",
+  name: "SortedStudentList.vue",
   components: {
     mdbDatatable2
   },
@@ -38,6 +37,7 @@ export default {
 
       db.collection('Students')
           .where('ban', "==", '-')
+          .where('grade', '==', `${this.$route.params.grade}`)
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {

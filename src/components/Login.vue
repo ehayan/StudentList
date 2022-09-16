@@ -36,13 +36,13 @@ export default {
     },
     login() {
       firebase.auth().signInWithEmailAndPassword(this.id, this.pw)
-          .then((userCredential) => {
-            const user = userCredential.user;
+          .then(() => {
+            // const user = userCredential.user;
 
             alert('로그인 성공');
             this.$router.push('/home')
 
-            console.log(user);
+            // console.log(user);
           })
           .catch((error) => {
             const errorCode = error.code;

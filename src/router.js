@@ -10,6 +10,7 @@ import RegisterTeacher from "@/components/RegisterTeacher";
 import RegisterClass from "@/components/RegisterClass";
 
 import Class from "@/components/Class";
+import SortedStudentList from "@/components/SortedStudentList";
 
 
 Vue.use(Router)
@@ -55,6 +56,11 @@ export default new Router({
       path: '/class/:grade/:ban',
       name: 'class',
       component: Class
+    },
+    {
+      path: '/class/:grade/:ban/list',
+      name: 'sortStudent',
+      component: SortedStudentList
     },
 
 

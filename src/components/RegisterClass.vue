@@ -26,7 +26,7 @@
 
       <div class="mt-3">
         <label>입학년도</label>
-        <input type="date" v-model="entrance">
+        <input type="number" placeholder="year" v-model="entrance" min="0000" max="3000">
       </div>
 
       <button type="button" class="btn btn-info" @click="onClassSave()">등록</button>
@@ -58,8 +58,9 @@ export default {
     onClassSave() {
       const db = firebase.firestore();
       const self = this;
-      db.collection('학급전체')
-          .add({
+      db.collection('ClassList')
+          .doc(`${self.entrance}-${self.grade}-${self.ban}`)
+          .set({
             teacher: self.teacher,
             grade: self.grade,
             ban: self.ban,

@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h4>Class {{$route.params.id}}</h4>
-    <router-link to="/studentInfo">등록</router-link>
+    <h4>{{$route.params.grade}}학년 {{$route.params.ban}}반</h4>
     <div>
       <mdb-datatable-2 className="card mt-3 p-3 mb-3" v-model="studentData" hover noFoundMessage="데이터가 없습니다"/>
     </div>
@@ -34,8 +33,9 @@ export default {
     init() {
       const self = this;
       const db = firebase.firestore()
-      db.collection('school')
-          .where('grade', '==', this.$route.params.id)
+      db.collection('Students')
+          .where('grade', '==', this.$route.params.grade)
+          .where('ban', '==', this.$route.params.ban)
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {

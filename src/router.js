@@ -1,15 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import studentInfo from "@/components/StudentInfo";
+import RegisterStudent from "@/components/RegisterStudent";
 import StudentList from "@/components/StudentList";
-import Class from '@/components/Class'
-import ClassList from "@/components/ClassList";
 import studentRevision from "@/components/StudentRevision";
 
 import Login from '@/components/Login.vue'
-import Register from "@/components/Register";
+import RegisterTeacher from "@/components/RegisterTeacher";
 import RegisterClass from "@/components/RegisterClass";
+
+import Class from "@/components/Class";
 
 
 Vue.use(Router)
@@ -24,7 +24,7 @@ export default new Router({
     {
       path: '/register',
       name: 'register',
-      component: Register
+      component: RegisterTeacher
     },
     {
       path: '/home',
@@ -42,9 +42,9 @@ export default new Router({
       component: StudentList
     },
     {
-      path: '/studentInfo',
-      name: 'studentInfo',
-      component: studentInfo
+      path: '/register/student',
+      name: 'registerStudent',
+      component: RegisterStudent
     },
     {
       path: '/studentRevision',
@@ -52,12 +52,7 @@ export default new Router({
       component: studentRevision
     },
     {
-      path: '/class',
-      name: 'class',
-      component: ClassList
-    },
-    {
-      path: '/class/:id',
+      path: '/class/:grade/:ban',
       name: 'class',
       component: Class
     },

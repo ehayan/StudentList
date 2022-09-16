@@ -18,23 +18,28 @@
       </div>
 
       <div class="mt-3">
+        <h5>학년</h5>
+        <input type="number" min="1" max="6" v-model="grade">
+      </div>
+
+      <div class="mt-3">
         <h5>학급</h5>
         <div class="custom-control custom-radio mt-3">
-          <input v-model="grade" type="radio" class="custom-control-input" name="grade" value="A" id="A">
+          <input v-model="ban" type="radio" class="custom-control-input" name="ban" value="A" id="A">
           <label class="custom-control-label" for="A">A</label>
         </div>
         <div class="custom-control custom-radio">
-          <input v-model="grade" type="radio" class="custom-control-input" name='grade' value="B" id="B">
+          <input v-model="ban" type="radio" class="custom-control-input" name='ban' value="B" id="B">
           <label class="custom-control-label" for="B">B</label>
         </div>
         <div class="custom-control custom-radio">
-          <input v-model="grade" type="radio" class="custom-control-input" name='grade' value="C" id="C">
+          <input v-model="ban" type="radio" class="custom-control-input" name='ban' value="C" id="C">
           <label class="custom-control-label" for="C">C</label>
         </div>
       </div>
     </div>
-    <button class="m-3" @click="onUpdateData">수정</button>
-    <button class="m-3" @click="onDeleteData">삭제</button>
+    <button type="button" class="btn btn-warning" @click="onUpdateData">수정</button>
+    <button type="button" class="btn btn-danger" @click="onDeleteData">삭제</button>
   </div>
 </template>
 
@@ -49,7 +54,8 @@ export default {
       name: '',
       age: '',
       gender: '',
-      grade: ''
+      grade: '',
+      ban: ''
     }
   },
   mounted() {
@@ -58,26 +64,28 @@ export default {
   methods: {
     init() {
       const db = firebase.firestore();
-      const _ref = db.collection('school').doc(`${this.key}`);
-     _ref.get()
-         .then((doc) => {
-           this.name = doc.data().name;
-           this.age = doc.data().age;
-           this.gender = doc.data().gender;
-           this.grade = doc.data().grade
-           // console.log(doc.data())
-         })
+      const _ref = db.collection('Students').doc(`${this.key}`);
+      _ref.get()
+          .then((doc) => {
+            // console.log(doc.data())
+            this.name = doc.data().name;
+            this.age = doc.data().age;
+            this.gender = doc.data().gender;
+            this.grade = doc.data().grade;
+            this.ban = doc.data().ban;
+          })
 
     },
     onUpdateData() {
       const db = firebase.firestore();
       const self = this;
-      const _ref = db.collection('school').doc(`${this.key}`);
+      const _ref = db.collection('Students').doc(`${this.key}`);
       _ref.update({
         name: self.name,
         age: self.age,
         gender: self.gender,
-        grade: self.grade
+        grade: self.grade,
+        ban : self.ban
       })
           .then(() => {
             alert('수정 완료')
@@ -103,5 +111,7 @@ export default {
 </script>
 
 <style scoped>
-
+button {
+  margin-top: 30px;
+}
 </style>

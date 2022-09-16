@@ -17,19 +17,8 @@
       </div>
 
       <div class="mt-3">
-        <h5>학급</h5>
-        <div class="custom-control custom-radio mt-3">
-          <input v-model="grade" type="radio" class="custom-control-input" name="grade" value="A" id="A">
-          <label class="custom-control-label" for="A">A</label>
-        </div>
-        <div class="custom-control custom-radio">
-          <input v-model="grade" type="radio" class="custom-control-input" name='grade' value="B" id="B">
-          <label class="custom-control-label" for="B">B</label>
-        </div>
-        <div class="custom-control custom-radio">
-          <input v-model="grade" type="radio" class="custom-control-input" name='grade' value="C" id="C">
-          <label class="custom-control-label" for="C">C</label>
-        </div>
+        <h5>학년</h5>
+        <input type="number" min="1" max="6" v-model="grade">
       </div>
     </div>
     <button @click="onAddData">저장</button>
@@ -40,25 +29,27 @@
 import firebase from "firebase";
 
 export default {
-  name: "StudentInfo.vue",
+  name: "RegisterStudent.vue",
   data() {
     return {
       name: '',
       age: '',
-      gender: '남',
-      grade: 'A',
+      gender: '',
+      grade: '',
+      ban: '',
     }
   },
   methods: {
     onAddData() {
       const db = firebase.firestore();
       const self = this;
-      db.collection('school')
+      db.collection('Students')
           .add({
             name: self.name,
             age: self.age,
             gender: self.gender,
             grade: self.grade,
+            ban: '-'
           })
           .then(() => {
             alert('등록성공')

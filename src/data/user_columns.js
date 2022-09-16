@@ -1,4 +1,3 @@
-//header
 export default [
     {
         label: 'Name',
@@ -13,11 +12,16 @@ export default [
     {
         label: 'Gender',
         field: 'gender',
-        sort: false
+        sort: true
     },
     {
         label: 'Grade',
         field: 'grade',
-        sort: false
+        sort: true
+    },
+    {
+        label: 'Ban',
+        field: 'ban',
+        sort: true
     },
 ];

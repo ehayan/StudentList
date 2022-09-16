@@ -52,7 +52,7 @@ export default {
   },
   mounted() {
     const user = firebase.auth().currentUser;
-    this.teacher = user.email
+    this.teacher = user.uid
   },
   methods: {
     onClassSave() {

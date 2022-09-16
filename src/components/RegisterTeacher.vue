@@ -27,7 +27,6 @@
     <br/>
     <button @click="onSave">저장</button>
     <div>
-      {{ id }} : {{ pw }} : {{ name }} : {{ gender }} : {{ birth }}
     </div>
   </div>
 </template>
@@ -51,29 +50,37 @@ export default {
       const db = firebase.firestore();
       const self = this;
       firebase.auth().createUserWithEmailAndPassword(this.id, this.pw)
+          //auth
           .then((result) => {
             console.log(result.user)
+            result.user.displayName = self.name;
 
             alert('회원가입 성공!')
+
+            //db
+            db.collection('teacher')
+                .add({
+                  id: self.id,
+                  name: self.name,
+                  gender: self.gender,
+                  birth: self.birth
+                })
             this.$router.go(-1)
           })
           .catch((error) => {
-            const errorCode = error.code;
-            if (errorCode === 'auth/weak-password') {
-              alert('비밀번호는 최소 6자리 입니다')
-            }
-            if (errorCode === 'auth/invalid-email') {
-              alert('유효하지않은 이메일입니다')
-            }
-          })
-
-      db.collection('teacher')
-          .add({
-            id: self.id,
-            name: self.name,
-            gender: self.gender,
-            birth: self.birth
-          })
+                const errorCode = error.code;
+                console.log(error)
+                if (errorCode === 'auth/weak-password') {
+                  alert('비밀번호는 최소 6자리 입니다')
+                }
+                if (errorCode === 'auth/invalid-email') {
+                  alert('유효하지않은 이메일입니다')
+                }
+                if (errorCode === 'auth/email-already-in-use') {
+                  alert('이미 존재하는 이메일입니다')
+                }
+              }
+          )
     }
   }
 }

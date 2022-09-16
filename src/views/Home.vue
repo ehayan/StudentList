@@ -1,13 +1,15 @@
 <template>
   <div class="home">
-    <router-link to="/studentList">학생리스트</router-link>
-
+    <span v-for="(schoolClass, i) in classList" :key="i">
+      <button type="button" class="btn btn-primary mt-3 mb-5" v-if="schoolClass.teacher==uid"
+              @click="goToClass(schoolClass)">{{ classList[i].grade }}학년 {{ classList[i].ban }}반
+      </button>
+    </span>
     <br>
-    <button type="button" class="btn btn-primary mt-3 mb-5" v-for="(schoolClass, i) in classList" :key="i">{{classList[i].grade}}학년 {{classList[i].ban}}반</button>
-    <br>
+    <button type="button" class="btn btn-tertiary" data-mdb-ripple-color="light" @click="goToStudents">학생리스트</button>
     <button type="button" class="btn btn-dark" @click="registerClass">학급등록</button>
     <br>
-    <button type="button" class="btn btn-danger mt-3" @click="logout">로그아웃</button>
+    <button type="button" class="btn btn-danger mt-5" @click="logout">로그아웃</button>
 
   </div>
 </template>
@@ -20,9 +22,10 @@ export default {
   mounted() {
     this.init();
   },
-  data(){
-    return{
-     classList: []
+  data() {
+    return {
+      classList: [],
+      uid: ''
     }
   },
   methods: {
@@ -35,10 +38,14 @@ export default {
               const _data = doc.data();
               _data['key'] = doc.id
               this.classList.push(_data)
-              // console.log(_data.key)//입학년도-학년-반
-              // console.log(_data)
             });
           })
+
+      firebase.auth().onAuthStateChanged((user) => {
+        this.uid = user.uid
+        // console.log(this.uid)
+      })
+
     },
     logout() {
       firebase.auth().signOut();
@@ -48,6 +55,13 @@ export default {
     registerClass() {
       this.$router.push('/register/class')
     },
+    goToStudents() {
+      this.$router.push('studentList')
+    },
+    goToClass(value) {
+      // console.log(value)
+      this.$router.push(`/class/${value.grade}/${value.ban}`)
+    }
   }
 }
 </script>

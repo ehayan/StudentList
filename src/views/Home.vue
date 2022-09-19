@@ -35,9 +35,12 @@ export default {
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-              const _data = doc.data();
+              const _data = doc.data().teacherObject;
               _data['key'] = doc.id
               this.classList.push(_data)
+
+              // console.log(_data)
+              // console.log(this.classList.forEach((element) => console.log(element.key)))
             });
           })
 

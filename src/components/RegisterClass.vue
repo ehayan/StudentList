@@ -56,16 +56,20 @@ export default {
   },
   methods: {
     onClassSave() {
+      //firestore에 접근하기 위한 객체 db
       const db = firebase.firestore();
       const self = this;
       db.collection('ClassList')
           .doc(`${self.entrance}-${self.grade}-${self.ban}`)
           .set({
-            teacher: self.teacher,
-            grade: self.grade,
-            ban: self.ban,
-            entrance: self.entrance
-          })
+            teacherObject: {
+              teacher: self.teacher,
+              grade: self.grade,
+              ban: self.ban,
+              entrance: self.entrance
+            },
+            test: '오브젝트 저장 테스트'
+          }, {merge: true})
           .then(() => {
             alert('학급 등록 성공')
             console.log()

@@ -14,6 +14,7 @@
     "start": "vue-cli-service serve --open"
   },
   "dependencies": {
+    "algoliasearch": "^4.14.2",
     "core-js": "^3.1.2",
     "firebase": "^8.2.9",
     "mdbvue": "./mdb/mdbvue/mdbvue-6.7.2.tgz",

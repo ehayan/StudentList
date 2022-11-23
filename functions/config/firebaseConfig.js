@@ -1,10 +1,7 @@
-const admin = require("firebase-admin");
-
-const serviceAccount = require("path/to/serviceAccountKey.json");
-
+const admin = require('firebase-admin');
+const serviceAccount = require('./student-test001-firebase-adminsdk-ail44-da7f801eab.json');
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://student-test001-default-rtdb.firebaseio.com"
+    credential: admin.credential.cert(serviceAccount)
 });
 
 module.exports = admin

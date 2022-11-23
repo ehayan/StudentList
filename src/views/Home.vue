@@ -21,6 +21,8 @@ export default {
   name: 'home',
   mounted() {
     this.init();
+    const user= firebase.auth().currentUser
+    console.log(user)
   },
   data() {
     return {

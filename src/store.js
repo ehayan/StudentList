@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-
+    serverUrl: 'http://127.0.0.1:5001/student-test001/asia-northeast3'
   },
   mutations: {
 

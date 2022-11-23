@@ -44,38 +44,36 @@ export default {
   name: "RegisterClass.vue",
   data() {
     return {
-      teacher: '',
+      teacherEmail: '',
       grade: '',
       ban: '',
       entrance: ''
     }
   },
-  mounted() {
-    const user = firebase.auth().currentUser;
-    this.teacher = user.uid
-  },
   methods: {
     onClassSave() {
       //firestore에 접근하기 위한 객체 db
       const db = firebase.firestore();
+      const user = firebase.auth().currentUser;
       const self = this;
       db.collection('ClassList')
-          .doc(`${self.entrance}-${self.grade}-${self.ban}`)
+          .doc(user.uid)
           .set({
-            teacherObject: {
-              teacher: self.teacher,
-              grade: self.grade,
-              ban: self.ban,
-              entrance: self.entrance
-            },
-            test: '오브젝트 저장 테스트'
-          }, {merge: true})
+            teacherEmail: user.email,
+            ban: self.ban,
+            entrance: self.entrance,
+            grade: self.grade,
+          })
           .then(() => {
             alert('학급 등록 성공')
             console.log()
             this.$router.push({name: 'home', params: {}})
           })
-    }
+    },
+    logout() {
+      firebase.auth().signOut();
+      alert('로그아웃')
+    },
   }
 }
 </script>

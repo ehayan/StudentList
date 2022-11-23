@@ -10,11 +10,12 @@
       <div>
         <button type="button" class="btn btn-info" @click="login">로그인</button>
         <button type="button" class="btn btn-warning" @click="register">회원가입</button>
-
+        <br>
 
       </div>
     </form>
 
+    <button @click="logout">로그아웃</button>
 
   </div>
 </template>
@@ -52,6 +53,10 @@ export default {
               alert('유효하지 않은 이메일')
             }
           })
+    },
+    logout() {
+      firebase.auth().signOut();
+      alert('로그아웃')
     }
   }
 }

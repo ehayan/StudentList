@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <span v-for="(schoolClass, i) in classList" :key="i">
-      <button type="button" class="btn btn-primary mt-3 mb-5" v-if="schoolClass.teacher==uid"
+      <button type="button" class="btn btn-primary mt-3 mb-5"
               @click="goToClass(schoolClass)">{{ classList[i].grade }}학년 {{ classList[i].ban }}반
       </button>
     </span>
@@ -21,36 +21,40 @@ export default {
   name: 'home',
   mounted() {
     this.init();
-    const user= firebase.auth().currentUser
-    console.log(user)
+    // const user = firebase.auth().currentUser
+    // console.log(user)
   },
   data() {
     return {
       classList: [],
-      uid: ''
     }
   },
   methods: {
     init() {
+      const self = this;
       const db = firebase.firestore();
-      db.collection('ClassList')
+      db.collection('classes')
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-              const _data = doc.data().teacherObject;
+              const _data = doc.data();
               _data['key'] = doc.id
-              this.classList.push(_data)
+
+              if (_data.teacherEmail === self.email) {
+                self.classList.push(_data)
+              }
+              // console.log(self.classList)
 
               // console.log(_data)
               // console.log(this.classList.forEach((element) => console.log(element.key)))
             });
           })
 
+      self.email = firebase.auth().currentUser.email;
       firebase.auth().onAuthStateChanged((user) => {
         this.uid = user.uid
-        // console.log(this.uid)
+        console.log(this.uid)
       })
-
     },
     logout() {
       firebase.auth().signOut();

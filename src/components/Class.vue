@@ -3,7 +3,7 @@
     <h4>{{$route.params.grade}}학년 {{$route.params.ban}}반</h4>
 
     <button type="button" class="btn btn-info" @click="goToSortList($route.params)">학생 등록</button>
-<!--    <router-link to='/class/${value.grade}/${value.ban}/list'>학생 추가</router-link>-->
+
     <div>
       <mdb-datatable-2 className="card mt-3 p-3 mb-3" v-model="studentData" hover noFoundMessage="데이터가 없습니다"/>
     </div>

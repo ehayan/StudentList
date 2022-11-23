@@ -1,11 +1,15 @@
 const functions = require('firebase-functions');
 const admin = require('./config/firebaseConfig');
-const {firebaseConfig} = require("firebase-functions");
 const regionHttps = functions.region('asia-northeast3').https;
 const cors = require('cors')({
     origin: ['http://localhost:8080'],
     credentials: true
 });
+
+const register = require('./register')
+exports.registerTeacher = register.registerTeacher
+exports.registerClass = register.registerClass
+exports.registerStudent = register.registerStudent
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -14,47 +18,32 @@ const cors = require('cors')({
 //     response.send("Hello from Firebase!");
 // });
 
-exports.registerTeacher = regionHttps.onRequest(async (request, response) => {
+exports.updateStudent = regionHttps.onRequest(async (request, response) => {
     cors(request, response, async () => {
-        const _user = {
-            email: request.body.id,
-            password: request.body.pw,
-        }
+        const _id = request.body.id;
         const _data = {
-            id: request.body.id,
             name: request.body.name,
+            age: request.body.age,
             gender: request.body.gender,
-            birth: request.body.birth
-        }
-        const auth = admin.auth();
-        auth.createUser(_user)
-            .then(async (userCredential) => {
-                // console.log(userCredential)
-                await admin.firestore().collection('teachers').doc(userCredential.uid).set(_data);
-                response.json({result: 'success', message: `데이터 ${userCredential.email} 등록 성공`, data: {uuid: userCredential.uid}});
-            })
-            .catch((e) => {
-                console.log(e.code)
-                response.json({result: 'fail', message: '등록 실패', data: {error: e.code}});
-            })
-    })
-});
-
-exports.registerClass = regionHttps.onRequest(async (request, response) => {
-    cors(request, response, async () => {
-        const _data = {
-            teacherEmail: request.body.teacherEmail,
             grade: request.body.grade,
-            ban: request.body.ban,
-            admissionYear: request.body.admissionYear
+            ban: request.body.ban
         }
-        const isEmpty = (obj) => !Object.values(obj).every(x => (x !== null && x !== "" && x !== undefined))
+        // const query = await admin.firestore().collection('students').doc(_id).get();
+        //
+        // if (query.data() === undefined) {
+        //     return response.json({result: 'fail', message: '데이터 조회 실패', data: {error: 1}});
+        // }
+        await admin.firestore().collection('students').doc(_id).set(_data, {merge: true})
+            .then(() => response.json({result: 'success', message: `데이터 업데이트 성공`, data: {id: request.query.id}}))
+            .catch(() => response.json({result: 'fail', message: `업데이트 오류 발생`, data: {error: 1}}));
+    })
+})
 
-        if (!isEmpty(_data)) {
-            const writeResult = await admin.firestore().collection('classes').add(_data)
-            response.json({result: 'success', message: `데이터 ${writeResult.id} 등록 성공`, data: {uuid: writeResult.id}});
-        }
-        response.json({result: 'fail', message: '등록 실패', data: {error: 1}});
+exports.deleteStudent = regionHttps.onRequest(async (request, response) => {
+    cors(request, response, async () => {
+        const _id = request.body.id;
+        await admin.firestore().collection('students').doc(_id).delete()
+            .then(() => response.json({result: 'success', message: `데이터 삭제 성공`, data: {error: 0}}))
+            .catch(() => response.json({result: 'fail', message: `삭제 오류 발생`, data: {error: 1}}))
     })
 });
-

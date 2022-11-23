@@ -6,8 +6,7 @@
       <h5>검색</h5>
       <input type="text" placeholder="검색" v-model="searchData" @change="search">
 
-      <mdb-datatable-2 id="studentlist" class="card mt-3 p-3 mb-3" v-model="studentData" hover
-                       noFoundMessage="데이터가 없습니다" @selected='onSelected($event)'/>
+      <mdb-datatable-2 id="studentlist" class="card mt-3 p-3 mb-3" v-model="studentData" hover noFoundMessage="데이터가 없습니다" @selected='onSelected($event)'/>
     </div>
   </div>
 
@@ -25,7 +24,7 @@ export default {
   },
   data() {
     return {
-      searchData:'',
+      searchData: '',
       studentData: {
         rows: [],
         columns: user_columns
@@ -40,20 +39,20 @@ export default {
       const self = this;
       const db = firebase.firestore()
 
-      db.collection('Students')
+      db.collection('students')
           .where('ban', "==", '-')
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
               const _data = doc.data();
-              _data['key'] = doc.id;
+              _data['id'] = doc.id;
               self.studentData.rows.push(_data);
             });
           })
     },
     onSelected(value) {
       console.log(value)
-      this.$router.push({name: 'studentRevision', params: {id: value.key}})
+      this.$router.push({name: 'studentRevision', params: {id: value.id}})
     },
 
     async search() {

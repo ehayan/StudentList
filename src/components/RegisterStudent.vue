@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import firebase from "firebase";
+import axios from "axios";
 
 export default {
   name: "RegisterStudent.vue",
@@ -36,25 +36,51 @@ export default {
       age: '',
       gender: '',
       grade: '',
-      ban: '',
     }
   },
   methods: {
     onAddData() {
-      const db = firebase.firestore();
       const self = this;
-      db.collection('Students')
-          .add({
-            name: self.name,
-            age: self.age,
-            gender: self.gender,
-            grade: self.grade,
-            ban: '-'
+      const _data = JSON.stringify({
+        'name': self.name,
+        'age': self.age,
+        'gender': self.gender,
+        'grade': self.grade,
+        'ban': '-',
+      });
+
+      const config = {
+        method: 'post',
+        url: 'http://127.0.0.1:5001/student-test001/asia-northeast3/registerStudent',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: _data
+      };
+
+      axios(config)
+          .then(res => {
+            if (res.data.result === 'success') {
+              alert('성공!');
+              self.$router.go(-1)
+            } else {
+              alert('실패ㅜㅜ')
+            }
           })
-          .then(() => {
-            alert('등록성공')
-            this.$router.go(-1);
-          })
+      // const db = firebase.firestore();
+      // const self = this;
+      // db.collection('Students')
+      //     .add({
+      //       name: self.name,
+      //       age: self.age,
+      //       gender: self.gender,
+      //       grade: self.grade,
+      //       ban: '-'
+      //     })
+      //     .then(() => {
+      //       alert('등록성공')
+      //       this.$router.go(-1);
+      //     })
     }
   }
 }

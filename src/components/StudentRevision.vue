@@ -45,12 +45,13 @@
 
 <script>
 import firebase from "firebase";
+import axios from "axios";
 
 export default {
   name: "StudentRevision",
   data() {
     return {
-      key: this.$route.params.id,
+      id: this.$route.params.id,
       name: '',
       age: '',
       gender: '',
@@ -64,7 +65,7 @@ export default {
   methods: {
     init() {
       const db = firebase.firestore();
-      const _ref = db.collection('Students').doc(`${this.key}`);
+      const _ref = db.collection('students').doc(`${this.id}`);
       _ref.get()
           .then((doc) => {
             // console.log(doc.data())
@@ -77,34 +78,83 @@ export default {
 
     },
     onUpdateData() {
-      const db = firebase.firestore();
       const self = this;
-      const _ref = db.collection('Students').doc(`${this.key}`);
-      _ref.update({
-        name: self.name,
-        age: self.age,
-        gender: self.gender,
-        grade: self.grade,
-        ban : self.ban
-      })
-          .then(() => {
-            alert('수정 완료')
-            this.$router.go(-1);
+      const _data = JSON.stringify({
+        'id': self.id,
+        'name': self.name,
+        'age': self.age,
+        'gender': self.gender,
+        'grade': self.grade,
+        'ban': self.ban,
+      });
+
+      const config = {
+        method: 'put',
+        url: 'http://127.0.0.1:5001/student-test001/asia-northeast3/updateStudent',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: _data
+      };
+      axios(config)
+          .then(res => {
+            if (res.data.result === 'success') {
+              alert('성공!');
+              self.$router.go(-1)
+            } else {
+              alert('실패ㅜㅜ')
+            }
           })
-          .catch((error) =>
-              console.log('error발생', error))
+      // const db = firebase.firestore();
+      // const self = this;
+      // const _ref = db.collection('Students').doc(`${this.id}`);
+      // _ref.update({
+      //   name: self.name,
+      //   age: self.age,
+      //   gender: self.gender,
+      //   grade: self.grade,
+      //   ban : self.ban
+      // })
+      //     .then(() => {
+      //       alert('수정 완료')
+      //       this.$router.go(-1);
+      //     })
+      //     .catch((error) =>
+      //         console.log('error발생', error))
     },
     onDeleteData() {
-      const db = firebase.firestore();
-      db.collection('school')
-          .doc(this.key)
-          .delete()
-          .then(() => {
-            alert('삭제 완료')
+      const self = this;
+      const _data = JSON.stringify({
+        'id': self.id,
+      });
+
+      const config = {
+        method: 'put',
+        url: 'http://127.0.0.1:5001/student-test001/asia-northeast3/deleteStudent',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: _data
+      };
+      axios(config)
+          .then(res => {
+            if (res.data.result === 'success') {
+              alert('성공!');
+              self.$router.go(-1)
+            } else {
+              alert('실패ㅜㅜ')
+            }
           })
-          .catch((error) => {
-            console.log('ERROR!', error);
-          })
+      // const db = firebase.firestore();
+      // db.collection('school')
+      //     .doc(this.id)
+      //     .delete()
+      //     .then(() => {
+      //       alert('삭제 완료')
+      //     })
+      //     .catch((error) => {
+      //       console.log('ERROR!', error);
+      //     })
     }
   }
 }

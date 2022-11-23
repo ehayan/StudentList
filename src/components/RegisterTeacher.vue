@@ -72,7 +72,9 @@ export default {
               alert('성공!');
               self.$router.go(-1)
             }
-            else alert('실패ㅜㅜ')
+            else {
+              alert('실패ㅜㅜ')
+            }
           })
       // const db = firebase.firestore();
       // const self = this;

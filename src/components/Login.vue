@@ -22,6 +22,7 @@
 
 <script>
 import firebase from "firebase";
+import axios from "axios";
 
 export default {
   name: "Login.vue",
@@ -36,14 +37,11 @@ export default {
       this.$router.push('/register')
     },
     login() {
-      firebase.auth().signInWithEmailAndPassword(this.id, this.pw)
+      const self = this;
+      firebase.auth().signInWithEmailAndPassword(self.id, self.pw)
           .then(() => {
-            // const user = userCredential.user;
-
             alert('로그인 성공');
-            this.$router.push('/home')
-
-            // console.log(user);
+            self.$router.push('/home')
           })
           .catch((error) => {
             const errorCode = error.code;

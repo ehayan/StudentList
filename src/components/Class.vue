@@ -1,9 +1,8 @@
 <template>
   <div>
-    <h4>{{$route.params.grade}}학년 {{$route.params.ban}}반</h4>
-<!--{{$route.query.id}}-->
+    <h4>{{ $route.params.grade }}학년 {{ $route.params.ban }}반</h4>
     <button type="button" class="btn btn-info" @click="goToSortList($route.params)">학생 등록</button>
-    <button type="button" class="btn btn-secondary">학급 수정</button>
+    <button type="button" class="btn btn-secondary" @click="goToClassRevision(id)">학급 수정</button>
     <button type="button" class="btn btn-danger" @click="onDelete">학생 삭제</button>
 
     <div>
@@ -26,7 +25,7 @@ export default {
   },
   data() {
     return {
-      id:this.$route.query.id,
+      id: this.$route.query.id,
       studentData: {
         rows: [],
         columns: user_columns,
@@ -40,26 +39,26 @@ export default {
     init() {
       const self = this;
       const db = firebase.firestore()
-      db.collection('Students')
+      db.collection('students')
           .where('grade', '==', this.$route.params.grade)
           .where('ban', '==', this.$route.params.ban)
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
               const _data = doc.data();
-              _data['key'] = doc.id;
+              _data['id'] = doc.id;
               self.studentData.rows.push(_data);
             });
 
           })
     },
-    goToSortList(value){
+    goToSortList(value) {
       this.$router.push(`/class/${value.grade}/${value.ban}/list`)
     },
-    onDelete(){
+    onDelete() {
       const self = this;
       const _data = JSON.stringify({
-        'id':self.id,
+        'id': self.id,
       });
 
       const config = {
@@ -76,13 +75,15 @@ export default {
             if (res.data.result === 'success') {
               alert('성공!');
               self.$router.go(-1)
-            }
-            else {
+            } else {
               alert('실패ㅜㅜ')
             }
           })
+    },
+    goToClassRevision() {
+      const self = this;
+      self.$router.push({name: 'classRevision', params: {id: self.id}})
     }
-
   }
 }
 </script>

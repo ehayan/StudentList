@@ -11,6 +11,7 @@ import RegisterClass from "@/components/RegisterClass";
 
 import Class from "@/components/Class";
 import SortedStudentList from "@/components/SortedStudentList";
+import classRevision from "@/components/ClassRevision";
 
 
 Vue.use(Router)
@@ -51,6 +52,11 @@ export default new Router({
       path: '/studentRevision',
       name: 'studentRevision',
       component: studentRevision
+    },
+    {
+      path: '/classRevision',
+      name: 'classRevision',
+      component: classRevision
     },
     {
       path: '/class/:grade/:ban',

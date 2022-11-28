@@ -21,8 +21,6 @@ export default {
   name: 'home',
   mounted() {
     this.init();
-    // const user = firebase.auth().currentUser
-    // console.log(user)
   },
   data() {
     return {
@@ -33,28 +31,23 @@ export default {
     init() {
       const self = this;
       const db = firebase.firestore();
+      self.email = firebase.auth().currentUser.email;
+
       db.collection('classes')
+          .where('teacherEmail', '==', self.email)
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
               const _data = doc.data();
               _data['id'] = doc.id
 
-              if (_data.teacherEmail === self.email) {
-                self.classList.push(_data)
-              }
-              // console.log(self.classList)
-
-              // console.log(_data)
-              // console.log(this.classList.forEach((element) => console.log(element.key)))
+              self.classList.push(_data)
             });
           })
-
-      self.email = firebase.auth().currentUser.email;
-      firebase.auth().onAuthStateChanged((user) => {
-        this.uid = user.uid
-        console.log(this.uid)
-      })
+      // firebase.auth().onAuthStateChanged((user) => {
+      //   this.uid = user.uid
+      //   console.log(this.uid)
+      // })
     },
     logout() {
       firebase.auth().signOut();
@@ -62,15 +55,16 @@ export default {
       this.$router.replace('/')
     },
     registerClass() {
-      this.$router.push('/register/class')
+      this.$router.push('/register/class')// == this.$router.push('registerClass')
     },
     goToStudents() {
       this.$router.push('studentList')
     },
     goToClass(value) {
+      // console.log(value)
       this.$router.push({
-          path: `/class/${value.grade}/${value.ban}`,
-          query: {id : value.id}
+        path: `/class/${value.grade}/${value.ban}`,
+        query: {id: value.id}
       })
     }
   }

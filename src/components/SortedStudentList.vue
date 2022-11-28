@@ -2,8 +2,11 @@
   <div>
     <h4>{{this.$route.params.grade}}학년 미지정 학생 리스트</h4>
     <div class="mt-4">
-      <mdb-datatable-2 id="studentlist" class="card mt-3 p-3 mb-3" v-model="studentData" hover
-                       noFoundMessage="데이터가 없습니다" @selected='onSelected($event)'/>
+      <mdb-datatable-2 id="studentlist" class="card mt-3 p-3 mb-3"
+                       v-model="studentData"
+                       hover
+                       noFoundMessage="데이터가 없습니다"
+                       @selected='onSelected($event)'/>
     </div>
   </div>
 
@@ -34,22 +37,21 @@ export default {
     init() {
       const self = this;
       const db = firebase.firestore()
-
-      db.collection('Students')
+      db.collection('students')
           .where('ban', "==", '-')
           .where('grade', '==', `${this.$route.params.grade}`)
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
               const _data = doc.data();
-              _data['key'] = doc.id;
+              _data['id'] = doc.id;
               self.studentData.rows.push(_data);
             });
           })
     },
     onSelected(value) {
       console.log(value)
-      this.$router.push({name: 'studentRevision', params: {id: value.key}})
+      this.$router.push({name: 'studentRevision', params: {id: value.id}})
     },
   }
 }

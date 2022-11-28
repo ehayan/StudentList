@@ -75,7 +75,6 @@ export default {
             this.grade = doc.data().grade;
             this.ban = doc.data().ban;
           })
-
     },
     onUpdateData() {
       const self = this;

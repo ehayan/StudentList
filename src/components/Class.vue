@@ -1,8 +1,10 @@
 <template>
   <div>
     <h4>{{$route.params.grade}}학년 {{$route.params.ban}}반</h4>
-
+<!--{{$route.query.id}}-->
     <button type="button" class="btn btn-info" @click="goToSortList($route.params)">학생 등록</button>
+    <button type="button" class="btn btn-secondary">학급 수정</button>
+    <button type="button" class="btn btn-danger" @click="onDelete">학생 삭제</button>
 
     <div>
       <mdb-datatable-2 className="card mt-3 p-3 mb-3" v-model="studentData" hover noFoundMessage="데이터가 없습니다"/>
@@ -15,6 +17,7 @@
 import firebase from "firebase";
 import {mdbDatatable2} from 'mdbvue';
 import user_columns from "@/data/user_columns";
+import axios from "axios";
 
 export default {
   name: "StudentList.vue",
@@ -23,6 +26,7 @@ export default {
   },
   data() {
     return {
+      id:this.$route.query.id,
       studentData: {
         rows: [],
         columns: user_columns,
@@ -51,7 +55,34 @@ export default {
     },
     goToSortList(value){
       this.$router.push(`/class/${value.grade}/${value.ban}/list`)
+    },
+    onDelete(){
+      const self = this;
+      const _data = JSON.stringify({
+        'id':self.id,
+      });
+
+      const config = {
+        method: 'post',
+        url: 'http://127.0.0.1:5001/student-test001/asia-northeast3/deleteClass',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: _data
+      };
+
+      axios(config)
+          .then(res => {
+            if (res.data.result === 'success') {
+              alert('성공!');
+              self.$router.go(-1)
+            }
+            else {
+              alert('실패ㅜㅜ')
+            }
+          })
     }
+
   }
 }
 </script>

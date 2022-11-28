@@ -38,7 +38,7 @@ export default {
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
               const _data = doc.data();
-              _data['key'] = doc.id
+              _data['id'] = doc.id
 
               if (_data.teacherEmail === self.email) {
                 self.classList.push(_data)
@@ -68,8 +68,10 @@ export default {
       this.$router.push('studentList')
     },
     goToClass(value) {
-      // console.log(value)
-      this.$router.push(`/class/${value.grade}/${value.ban}`)
+      this.$router.push({
+          path: `/class/${value.grade}/${value.ban}`,
+          query: {id : value.id}
+      })
     }
   }
 }

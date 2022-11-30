@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import firebase from "firebase";
+// import firebase from "firebase";
 import {mdbDatatable2} from 'mdbvue';
 import user_columns from "@/data/user_columns";
 import axios from "axios";
@@ -38,19 +38,40 @@ export default {
   methods: {
     init() {
       const self = this;
-      const db = firebase.firestore()
-      db.collection('students')
-          .where('grade', '==', this.$route.params.grade)
-          .where('ban', '==', this.$route.params.ban)
-          .get()
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              const _data = doc.data();
-              _data['id'] = doc.id;
-              self.studentData.rows.push(_data);
-            });
+      const _data = JSON.stringify({
+        'grade': self.$route.params.grade,
+        'ban': self.$route.params.ban
+      });
 
+      const config = {
+        method: 'post',
+        url: 'http://127.0.0.1:5001/student-test001/asia-northeast3/getClassStudents',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: _data
+      };
+
+      axios(config)
+          .then(res => {
+            if (res.data.result === 'success') {
+              self.studentData.rows.push(...res.data.data)
+            } else {
+              alert('실패ㅜㅜ')
+            }
           })
+      // const db = firebase.firestore()
+      // db.collection('students')
+      //     .where('grade', '==', this.$route.params.grade)
+      //     .where('ban', '==', this.$route.params.ban)
+      //     .get()
+      //     .then((querySnapshot) => {
+      //       querySnapshot.forEach((doc) => {
+      //         const _data = doc.data();
+      //         _data['id'] = doc.id;
+      //         self.studentData.rows.push(_data);
+      //       });
+      //     })
     },
     goToSortList(value) {
       this.$router.push(`/class/${value.grade}/${value.ban}/list`)

@@ -2,21 +2,30 @@ const functions = require('firebase-functions');
 const admin = require('./config/firebaseConfig');
 const regionHttps = functions.region('asia-northeast3').https;
 const cors = require('cors')({
-    origin: ['http://localhost:8080'],
+    origin: ['http://localhost:8080', 'http://127.0.0.1:5001'],//==white list, 이 주소로 오는 것만 허용(* 로 하면 모든 origin으로 받음)
     credentials: true
 });
 exports.registerTeacher = regionHttps.onRequest(async (request, response) => {
     cors(request, response, async () => {
-        const _user = {
-            email: request.body.id,
-            password: request.body.pw,
-        }
-        const _data = {
-            id: request.body.id,
-            name: request.body.name,
-            gender: request.body.gender,
-            birth: request.body.birth
-        }
+        // const _user = {
+        //     email: request.body.id,
+        //     password: request.body.pw,
+        // }
+        // const _data = {
+        //     id: request.body.id,
+        //     name: request.body.name,
+        //     gender: request.body.gender,
+        //     birth: request.body.birth
+        // }
+        const id = request.body.id
+        const password = request.body.pw
+        const name = request.body.name
+        const gender = request.body.gender
+        const birth = request.body.birth
+
+        const _data = {id: id, name:name, gender:gender, birth:birth};
+        const _user = {email: id, password:password}
+
         const auth = admin.auth();
         auth.createUser(_user)
             .then(async (userCredential) => {

@@ -16,6 +16,7 @@
 
 <script>
 import firebase from "firebase";
+import swal from "sweetalert2";
 
 export default {
   name: 'home',
@@ -49,10 +50,32 @@ export default {
       //   console.log(this.uid)
       // })
     },
+    // logout() {
+      // firebase.auth().signOut();
+      // alert('로그아웃')
+      // this.$router.replace('/')
+    // },
     logout() {
-      firebase.auth().signOut();
-      alert('로그아웃')
-      this.$router.replace('/')
+      // firebase.auth().signOut();
+      // alert('로그아웃')
+      const self = this;
+      swal.fire({
+        title: '로그아웃 할까요?',
+        text: "확인을 누르시면 로그아웃 합니다!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: '확인',
+        cancelButtonText: '취소'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          firebase.auth().signOut();
+          swal.fire('로그아웃', '로그아웃 되었습니다', 'success')
+              .then(() => {
+                delete localStorage.token;
+                self.$router.replace({path: '/'}).catch(() => true)
+              })
+        }
+      })
     },
     registerClass() {
       this.$router.push('/register/class')// == this.$router.push('registerClass')

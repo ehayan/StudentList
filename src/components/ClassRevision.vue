@@ -80,8 +80,6 @@ export default {
         data: _data
       };
 
-      console.log(_data);
-
       axios(config)
           .then(res => {
             if (res.data.result === 'success') {

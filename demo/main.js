@@ -1,6 +1,7 @@
 import 'bootstrap-css-only/css/bootstrap.min.css'
 import 'mdbvue/lib/css/mdb.min.css'
 import '@fortawesome/fontawesome-free/css/all.min.css'
+import 'sweetalert2/dist/sweetalert2.min.css'
 
 import Vue from 'vue'
 import App from './App.vue'

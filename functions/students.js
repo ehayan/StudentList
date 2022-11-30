@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('./config/firebaseConfig');
 const regionHttps = functions.region('asia-northeast3').https;
 const cors = require('cors')({
-    origin: ['http://localhost:8080'],
+    origin: ['http://localhost:8080', 'http://127.0.0.1:5001'],
     credentials: true
 });
 exports.updateStudent = regionHttps.onRequest(async (request, response) => {

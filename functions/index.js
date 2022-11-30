@@ -93,9 +93,6 @@ exports.getClassStudents = regionHttps.onRequest(async (request, response) => {
 
         let _students = [];
 
-        if (querySnapshot.size === 0) {
-            return response.json({result: 'fail'})
-        }
         querySnapshot.forEach((doc) => {
             const _data = doc.data();
             _data['id'] = doc.id;
@@ -116,5 +113,26 @@ exports.getClassDetail = regionHttps.onRequest(async (request, response) => {
 
         const _data = query.data();
         response.json({result: 'success', data: _data})
+    })
+});
+
+exports.getSortedStudents = regionHttps.onRequest(async (request, response) => {
+    cors(request, response, async () => {
+        const grade = request.body.grade;
+        const ban = request.body.ban;
+
+        const querySnapshot = await admin.firestore().collection('students')
+            .where('grade', '==', grade)
+            .where('ban', '==', ban)
+            .get()
+
+        let _students = [];
+
+        querySnapshot.forEach((doc) => {
+            const _data = doc.data();
+            _data['id'] = doc.id;
+            _students.push(_data);
+        });
+        response.json({result: 'success', data: _students})
     })
 });

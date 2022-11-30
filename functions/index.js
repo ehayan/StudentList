@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('./config/firebaseConfig');
 const regionHttps = functions.region('asia-northeast3').https;
 const cors = require('cors')({
-    origin: ['http://localhost:8080', 'http://127.0.0.1:5001'],
+    origin: ['http://127.0.0.1:5001', 'http://localhost:8080'],
     credentials: true
 });
 
@@ -32,10 +32,30 @@ exports.getlogin = regionHttps.onRequest(async (request, response) => {
 
         admin.auth().getUserByEmail(id)
             .then((userRecord) => {
-                console.log(userRecord)
+                // console.log(userRecord)
                 // console.log(userRecord.providerData[0]) //UserInfo
-                response.json(userRecord.providerData);
+                response.json(userRecord.providerData[0]);
             })
     })
 });
 
+exports.getClasses = regionHttps.onRequest(async (request, response) => {
+    cors(request, response, async () => {
+        const email = request.body.email;
+        const querySnapshot = await admin.firestore().collection('classes')
+            .where('teacherEmail', '==', email)
+            .get()
+
+        let _classList = [];
+
+        if (querySnapshot.size === 0) {
+            return response.json({result: 'fail'})
+        }
+        querySnapshot.forEach((doc) => {
+            const _data = doc.data();
+            _data['id'] = doc.id;
+            _classList.push(_data);
+        });
+        response.json({result: 'success', data: _classList})
+    })
+});

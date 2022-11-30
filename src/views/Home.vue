@@ -17,6 +17,7 @@
 <script>
 import firebase from "firebase";
 import swal from "sweetalert2";
+import axios from "axios";
 
 export default {
   name: 'home',
@@ -25,39 +26,48 @@ export default {
   },
   data() {
     return {
+      email: this.$store.state.token.email,
       classList: [],
     }
   },
   methods: {
     init() {
       const self = this;
-      const db = firebase.firestore();
-      self.email = firebase.auth().currentUser.email;
+      const _data = JSON.stringify({
+        email: self.email
+      });
 
-      db.collection('classes')
-          .where('teacherEmail', '==', self.email)
-          .get()
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              const _data = doc.data();
-              _data['id'] = doc.id
+      const config = {
+        method: 'post', //get이면 데이터를 보낼 수가 없구나 post로 바꾸니까 바로 됨 ㄷㄷ
+        url: 'http://127.0.0.1:5001/student-test001/asia-northeast3/getClasses',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: _data
+      }
 
-              self.classList.push(_data)
-            });
+      axios(config)
+          .then(res => {
+            if (res.data.result === 'success') {
+              self.classList = res.data.data
+            } else {
+              console.log('실패')
+            }
           })
-      // firebase.auth().onAuthStateChanged((user) => {
-      //   this.uid = user.uid
-      //   console.log(this.uid)
-      // })
+      // const db = firebase.firestore();
+      // db.collection('classes')
+      //     .where('teacherEmail', '==', self.email)
+      //     .get()
+      //     .then((querySnapshot) => {
+      //       querySnapshot.forEach((doc) => {
+      //         const _data = doc.data();
+      //         _data['id'] = doc.id
+      //
+      //         self.classList.push(_data)
+      //       });
+      //     })
     },
-    // logout() {
-      // firebase.auth().signOut();
-      // alert('로그아웃')
-      // this.$router.replace('/')
-    // },
     logout() {
-      // firebase.auth().signOut();
-      // alert('로그아웃')
       const self = this;
       swal.fire({
         title: '로그아웃 할까요?',

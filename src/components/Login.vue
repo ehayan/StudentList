@@ -15,8 +15,8 @@
       </div>
     </form>
 
-    {{msg | capitalize}}
-    {{money |money}}
+    {{ msg | capitalize }}
+    {{ money |money }}
     <br>
     <button @click="logout">로그아웃</button>
 
@@ -29,15 +29,15 @@ import axios from "axios";
 
 export default {
   name: "Login.vue",
-  filters:{ //텍스트 형식화, '|'로 사용, 여러개 적용가능 -> 돈 표기법, 날짜 형식으로 포멧팅 등
+  filters: { //텍스트 형식화, '|'로 사용, 여러개 적용가능 -> 돈 표기법, 날짜 형식으로 포멧팅 등
     capitalize(value) {
-      if(!value) return "";
+      if (!value) return "";
       return value.toUpperCase();
       // value = value.toString();
       // return value.charAt(0).toUpperCase() + value.slice(1)
     },
-    money(value){
-      if(!value) return "";
+    money(value) {
+      if (!value) return "";
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     }
   },
@@ -63,9 +63,9 @@ export default {
             alert('로그인 성공');
             self.$router.push('/home')
 
-              const _data = JSON.stringify({
-                'id': self.id,
-              });
+            const _data = JSON.stringify({
+              'id': self.id,
+            });
 
             const config = {
               method: 'post',
@@ -87,34 +87,10 @@ export default {
 
           })
           .catch((error) => {
+            alert('로그인 실패!')
             console.log(error.code)
           })
     },
-    // getLogin() {
-    //   const self = this;
-    //
-    //   const _data = JSON.stringify({
-    //     'id': self.id,
-    //     'password': self.pw,
-    //   });
-    //   const config = {
-    //     method: 'post',
-    //     url: 'http://127.0.0.1:5001/student-test001/asia-northeast3/getlogin',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     data: _data
-    //   }
-    //
-    //   axios(config)
-    //       .then(res => {
-    //         localStorage.token = JSON.stringify(res.data);
-    //         self.$router.push('/home');
-    //       })
-    //       .catch(() => {
-    //         alert('로그인 실패ㅜㅜ')
-    //       })
-    // },
     logout() {
       firebase.auth().signOut();
       alert('로그아웃')

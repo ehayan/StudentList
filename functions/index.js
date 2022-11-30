@@ -104,3 +104,17 @@ exports.getClassStudents = regionHttps.onRequest(async (request, response) => {
         response.json({result: 'success', data: _students})
     })
 });
+
+exports.getClassDetail = regionHttps.onRequest(async (request, response) => {
+    cors(request, response, async () => {
+        const id = request.body.id;
+        const query = await admin.firestore().collection('classes').doc(id).get();
+
+        if (query.data() === undefined) {
+            return response.json({result: 'fail'})
+        }
+
+        const _data = query.data();
+        response.json({result: 'success', data: _data})
+    })
+});

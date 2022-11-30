@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import firebase from "firebase";
+// import firebase from "firebase";
 import axios from "axios";
 
 export default {
@@ -53,14 +53,38 @@ export default {
   },
   methods: {
     init() {
-      const db = firebase.firestore();
-      const _ref = db.collection('classes').doc(`${this.id}`);
-      _ref.get()
-          .then((doc) => {
-            this.grade = doc.data().grade;
-            this.ban = doc.data().ban;
-            this.admissionYear = doc.data().admissionYear;
+      const self = this;
+      const _data = JSON.stringify({
+        'id': self.id,
+      });
+
+      const config = {
+        method: 'post',
+        url: 'http://127.0.0.1:5001/student-test001/asia-northeast3/getClassDetail',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: _data
+      };
+      axios(config)
+          .then(res => {
+            if (res.data.result === 'success') {
+              const data = res.data.data
+              self.grade = data.grade;
+              self.ban = data.ban;
+              self.admissionYear = data.admissionYear;
+            } else {
+              alert('실패ㅜㅜ')
+            }
           })
+      // const db = firebase.firestore();
+      // const _ref = db.collection('classes').doc(`${this.id}`);
+      // _ref.get()
+      //     .then((doc) => {
+      //       this.grade = doc.data().grade;
+      //       this.ban = doc.data().ban;
+      //       this.admissionYear = doc.data().admissionYear;
+      //     })
     },
     onModify() {
       const self = this;

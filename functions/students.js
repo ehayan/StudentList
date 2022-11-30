@@ -29,3 +29,17 @@ exports.deleteStudent = regionHttps.onRequest(async (request, response) => {
             .catch(() => response.json({result: 'fail', message: `삭제 오류 발생`, data: {error: 1}}))
     })
 });
+
+exports.getStudentDetail = regionHttps.onRequest(async (request, response) => {
+    cors(request, response, async () => {
+        const id = request.body.id;
+        const query = await admin.firestore().collection('students').doc(id).get();
+
+        if (query.data() === undefined) {
+            return response.json({result: 'fail'})
+        }
+
+        const _data = query.data();
+        response.json({result: 'success', data: _data})
+    })
+});

@@ -6,7 +6,11 @@
       <h5>검색</h5>
       <input type="text" placeholder="검색" v-model="searchData" @change="search">
 
-      <mdb-datatable-2 id="studentlist" class="card mt-3 p-3 mb-3" v-model="studentData" hover noFoundMessage="데이터가 없습니다" @selected='onSelected($event)'/>
+      <mdb-datatable-2 id="studentlist" class="card mt-3 p-3 mb-3"
+                       v-model="studentData"
+                       hover
+                       noFoundMessage="데이터가 없습니다"
+                       @selected='onSelected($event)'/>
     </div>
   </div>
 
@@ -16,6 +20,7 @@
 import {mdbDatatable2} from 'mdbvue';
 import user_columns from "@/data/user_columns";
 import {firebase} from "@/firebase/firebaseConfig";
+// import axios from "axios";
 
 export default {
   name: "StudentList.vue",
@@ -39,6 +44,23 @@ export default {
       const self = this;
       const db = firebase.firestore()
 
+      // const config = {
+      //   method: 'get',
+      //   url: 'http://127.0.0.1:5001/student-test001/asia-northeast3/getStudents',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      // }
+      //
+      // axios(config)
+      //     .then(res => {
+      //       if (res.data.result === 'success') {
+      //         self.studentData.rows = res.data.data
+      //         console.log(self.studentData.rows)//데이터는 들어갔지만 표에서는 안나오네 ㅋㅡㅋ
+      //       } else {
+      //         console.log('실패')
+      //       }
+      //     })
       db.collection('students')
           .where('ban', "==", '-')
           .get()
@@ -47,6 +69,7 @@ export default {
               const _data = doc.data();
               _data['id'] = doc.id;
               self.studentData.rows.push(_data);
+              console.log(self.studentData.rows)
             });
           })
     },

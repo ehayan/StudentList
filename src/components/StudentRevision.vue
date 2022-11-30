@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import firebase from "firebase";
+// import firebase from "firebase";
 import axios from "axios";
 
 export default {
@@ -64,17 +64,43 @@ export default {
   },
   methods: {
     init() {
-      const db = firebase.firestore();
-      const _ref = db.collection('students').doc(`${this.id}`);
-      _ref.get()
-          .then((doc) => {
-            // console.log(doc.data())
-            this.name = doc.data().name;
-            this.age = doc.data().age;
-            this.gender = doc.data().gender;
-            this.grade = doc.data().grade;
-            this.ban = doc.data().ban;
+      const self = this;
+      const _data = JSON.stringify({
+        'id': self.id,
+      });
+
+      const config = {
+        method: 'post',
+        url: 'http://127.0.0.1:5001/student-test001/asia-northeast3/getStudentDetail',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: _data
+      };
+      axios(config)
+          .then(res => {
+            if (res.data.result === 'success') {
+              const data = res.data.data
+              self.name = data.name;
+              self.age = data.age;
+              self.gender = data.gender;
+              self.grade = data.grade;
+              self.ban = data.ban;
+            } else {
+              alert('실패ㅜㅜ')
+            }
           })
+      // const db = firebase.firestore();
+      // const _ref = db.collection('students').doc(`${this.id}`);
+      // _ref.get()
+      //     .then((doc) => {
+      //       // console.log(doc.data())
+      //       this.name = doc.data().name;
+      //       this.age = doc.data().age;
+      //       this.gender = doc.data().gender;
+      //       this.grade = doc.data().grade;
+      //       this.ban = doc.data().ban;
+      //     })
     },
     onUpdateData() {
       const self = this;

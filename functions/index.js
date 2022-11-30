@@ -14,6 +14,7 @@ exports.registerStudent = register.registerStudent
 const students = require('./students')
 exports.updateStudent = students.updateStudent
 exports.deleteStudent = students.deleteStudent
+exports.getStudentDetail = students.getStudentDetail
 
 const classes = require('./classes')
 exports.updateClass = classes.updateClass
@@ -59,3 +60,24 @@ exports.getClasses = regionHttps.onRequest(async (request, response) => {
         response.json({result: 'success', data: _classList})
     })
 });
+
+exports.getStudents = regionHttps.onRequest(async (request, response) => {
+    cors(request, response, async () => {
+        const querySnapshot = await admin.firestore().collection('students')
+            .where('ban', '==', '-')
+            .get()
+
+        let _students = [];
+
+        if (querySnapshot.size === 0) {
+            return response.json({result: 'fail'})
+        }
+        querySnapshot.forEach((doc) => {
+            const _data = doc.data();
+            _data['id'] = doc.id;
+            _students.push(_data);
+        });
+        response.json({result: 'success', data: _students})
+    })
+});
+

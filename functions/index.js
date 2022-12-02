@@ -12,13 +12,18 @@ exports.registerClass = register.registerClass
 exports.registerStudent = register.registerStudent
 
 const students = require('./students')
+exports.getStudents = students.getStudents
 exports.updateStudent = students.updateStudent
 exports.deleteStudent = students.deleteStudent
 exports.getStudentDetail = students.getStudentDetail
+exports.getClassStudents = students.getClassStudents
+exports.getSortedStudents = students.getSortedStudents
 
 const classes = require('./classes')
+exports.getClasses = classes.getClasses
 exports.updateClass = classes.updateClass
 exports.deleteClass = classes.deleteClass
+exports.getClassDetail = classes.getClassDetail
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -37,102 +42,5 @@ exports.getlogin = regionHttps.onRequest(async (request, response) => {
                 // console.log(userRecord.providerData[0]) //UserInfo
                 response.json(userRecord.providerData[0]);
             })
-    })
-});
-
-exports.getClasses = regionHttps.onRequest(async (request, response) => {
-    cors(request, response, async () => {
-        const email = request.body.email;
-        const querySnapshot = await admin.firestore().collection('classes')
-            .where('teacherEmail', '==', email)
-            .get()
-
-        let _classList = [];
-
-        if (querySnapshot.size === 0) {
-            return response.json({result: 'fail'})
-        }
-        querySnapshot.forEach((doc) => {
-            const _data = doc.data();
-            _data['id'] = doc.id;
-            _classList.push(_data);
-        });
-        response.json({result: 'success', data: _classList})
-    })
-});
-
-exports.getStudents = regionHttps.onRequest(async (request, response) => {
-    cors(request, response, async () => {
-        const querySnapshot = await admin.firestore().collection('students')
-            .where('ban', '==', '-')
-            .get()
-
-        let _students = [];
-
-        if (querySnapshot.size === 0) {
-            return response.json({result: 'fail'})
-        }
-        querySnapshot.forEach((doc) => {
-            const _data = doc.data();
-            _data['id'] = doc.id;
-            _students.push(_data);
-        });
-        response.json({result: 'success', data: _students})
-    })
-});
-
-exports.getClassStudents = regionHttps.onRequest(async (request, response) => {
-    cors(request, response, async () => {
-        const grade = request.body.grade;
-        const ban = request.body.ban;
-
-        const querySnapshot = await admin.firestore().collection('students')
-            .where('grade', '==', grade)
-            .where('ban', '==', ban)
-            .get()
-
-        let _students = [];
-
-        querySnapshot.forEach((doc) => {
-            const _data = doc.data();
-            _data['id'] = doc.id;
-            _students.push(_data);
-        });
-        response.json({result: 'success', data: _students})
-    })
-});
-
-exports.getClassDetail = regionHttps.onRequest(async (request, response) => {
-    cors(request, response, async () => {
-        const id = request.body.id;
-        const query = await admin.firestore().collection('classes').doc(id).get();
-
-        if (query.data() === undefined) {
-            return response.json({result: 'fail'})
-        }
-
-        const _data = query.data();
-        response.json({result: 'success', data: _data})
-    })
-});
-
-exports.getSortedStudents = regionHttps.onRequest(async (request, response) => {
-    cors(request, response, async () => {
-        const grade = request.body.grade;
-        const ban = request.body.ban;
-
-        const querySnapshot = await admin.firestore().collection('students')
-            .where('grade', '==', grade)
-            .where('ban', '==', ban)
-            .get()
-
-        let _students = [];
-
-        querySnapshot.forEach((doc) => {
-            const _data = doc.data();
-            _data['id'] = doc.id;
-            _students.push(_data);
-        });
-        response.json({result: 'success', data: _students})
     })
 });

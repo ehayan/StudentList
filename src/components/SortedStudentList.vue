@@ -76,6 +76,8 @@ export default {
       console.log(value)
       this.$router.push({name: 'studentRevision', params: {id: value.id}})
     },
+
+
   }
 }
 </script>
